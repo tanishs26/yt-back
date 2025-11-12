@@ -1,12 +1,21 @@
-import express from "express";
 import connectDB from "./db/index.js";
 import dotenv from "dotenv";
-
+import app from "./app.js";
 dotenv.config({
-    path:"./env"
-})
+  path: "./env",
+});
 
-const app = express();
+connectDB()
+  .then(()=>{
+    app.get('/',(req,res)=>{
+        res.send("API IS RUNNING...");
+    })
+    app.listen(process.env.port || 8000,()=>{
+        console.log(`SERVER STARTED AT PORT ${process.env.port || 8000}`);
+    })
+  })
+  .catch((err) => console.log("ERROR CONNECTING DB main Index:", err));
+
 // (async () => {
 //   try {
 //     await mongoose.connect(`${process.env.MONGODB_URL}/yt-backend`);
@@ -21,4 +30,3 @@ const app = express();
 //     throw error;
 //   }
 // })();
-connectDB()
