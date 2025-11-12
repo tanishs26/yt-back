@@ -8,7 +8,7 @@ dotenv.config({
 connectDB()
   .then(()=>{
     app.get('/',(req,res)=>{
-        res.send("API IS RUNNING...");
+        res.send("API IS RUNNING Bro...");
     })
     app.listen(process.env.port || 8000,()=>{
         console.log(`SERVER STARTED AT PORT ${process.env.port || 8000}`);
