@@ -3,14 +3,19 @@
   "version": "1.0.0",
   "description": "backend of youtube",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev":"nodemon index.js"
   },
   "keywords": [
     "javascript",
     "backend",
     "node"
   ],
-  "author": "",
-  "license": "ISC"
+  "author": "Tanish Sharma",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
 }
