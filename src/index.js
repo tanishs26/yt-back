@@ -2,13 +2,13 @@ import connectDB from "./db/index.js";
 import dotenv from "dotenv";
 import app from "./app.js";
 dotenv.config({
-  path: "./env",
+  path: "./.env",
 });
 
 connectDB()
   .then(()=>{
     app.get('/',(req,res)=>{
-        res.send("API IS RUNNING Bro...");
+        res.send("API IS WORKING");
     })
     app.listen(process.env.port || 8000,()=>{
         console.log(`SERVER STARTED AT PORT ${process.env.port || 8000}`);
