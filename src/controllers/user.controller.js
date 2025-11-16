@@ -3,6 +3,12 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { cloudinaryUpload } from "../utils/cloudinary.js";
+import jwt from "jsonwebtoken";
+
+const options = {
+  httpOnly: true,
+  secure: true,
+};
 
 const generateAccessAndRefreshToken = async (userId) => {
   const user = await User.findById(userId);
@@ -86,9 +92,6 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, createdUser, "User created successfully."));
 });
 
-
-
-
 // LOGIN HANDLER
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password, userName } = req.body;
@@ -122,10 +125,6 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   // sending cookies
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
 
   return res
     .status(200)
@@ -136,15 +135,17 @@ const loginUser = asyncHandler(async (req, res) => {
         200,
         {
           user: loggedInUser,
-          refreshToken: refreshToken,
-          accessToken: accessToken,
+          refreshToken,
+          accessToken,
         },
         "User logged in successfully!"
       )
     );
 });
 
+// LOGOUT HANDLER
 const logoutUser = asyncHandler(async (req, res) => {
+  console.log(req.user);
   const userId = req.user._id;
   await User.findByIdAndUpdate(
     userId,
@@ -166,4 +167,27 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User logged out"));
 });
 
-export { loginUser, registerUser,logoutUser };
+// REFRESH ACCESSS TOKEN HANDLER
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    req.user._id
+  );
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        200,
+        {
+          accessToken,
+          refreshToken,
+        },
+        "Access token refreshed successfully!"
+      )
+    );
+});
+
+
+
+export { loginUser, registerUser, logoutUser, refreshAccessToken };
