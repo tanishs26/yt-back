@@ -246,6 +246,65 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, newDetail, "User details updated successfully"));
 });
 
+// UPDATING AVATAR
+const avatarUpdate = asyncHandler(async (req, res) => {
+  const newAvatarLocalUrl = req.file?.path;
+  if (!newAvatarLocalUrl) {
+    throw new ApiError(400, "Avatar local path not given");
+  }
+
+  const avatar = await cloudinaryUpload(avatar);
+
+  if (!avatar) {
+    throw new ApiError(404, "cloudinary avatar image url");
+  }
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        avatar: avatar.url,
+      },
+    },
+    {
+      new: true,
+    }
+  ).select("-password -refreshToken");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Uploaded successfully"));
+});
+
+
+// UPDATING COVER IMAGE
+const coverImageUpdate = asyncHandler(async (req, res) => {
+  const newCoverImageLocalUrl = req.file?.path;
+  if (!newCoverImageLocalUrl) {
+    throw new ApiError(400, "Cover image local path not given");
+  }
+
+  const coverImage = await cloudinaryUpload(newCoverImageLocalUrl);
+
+  if (!coverImage) {
+    throw new ApiError(404, "cloudinary cover image url");
+  }
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        coverImage: coverImage.url,
+      },
+    },
+    {
+      new: true,
+    }
+  ).select("-password -refreshToken");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Uploaded successfully"));
+});
+
+
+
 export {
   loginUser,
   registerUser,
@@ -254,4 +313,6 @@ export {
   changeCurrentPassword,
   getUser,
   updateAccountDetails,
+  avatarUpdate,
+  coverImageUpdate
 };

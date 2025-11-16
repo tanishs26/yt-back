@@ -36,4 +36,12 @@ router.route("/get-user").get(verifyJwt, getUser);
 router.route("/update-user").put(verifyJwt, updateAccountDetails);
 router.route("/password").put(verifyJwt, changeCurrentPassword);
 
+router.route('change-avatar').post(upload.fields([
+  {
+    name:avatar,
+    maxCount:1
+  }
+]))
+
+
 export default router;
