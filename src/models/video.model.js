@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import  mongoose, { Schema } from "mongoose";
+
 
 const videoSchema = new Schema(
   {
@@ -37,4 +38,4 @@ const videoSchema = new Schema(
   { timestamps: true }
 );
 
-export const Video = mongooose.model("Video", videoSchema);
+export const Video =  mongoose.model("Video", videoSchema);

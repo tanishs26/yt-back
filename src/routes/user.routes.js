@@ -7,6 +7,7 @@ import {
   changeCurrentPassword,
   getUser,
   updateAccountDetails,
+  avatarUpdate,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
@@ -36,12 +37,7 @@ router.route("/get-user").get(verifyJwt, getUser);
 router.route("/update-user").put(verifyJwt, updateAccountDetails);
 router.route("/password").put(verifyJwt, changeCurrentPassword);
 
-router.route('change-avatar').post(upload.fields([
-  {
-    name:avatar,
-    maxCount:1
-  }
-]))
+router.route('/change-avatar').put(verifyJwt,upload.single("avatar"),avatarUpdate)
 
 
 export default router;
