@@ -4,7 +4,6 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { cloudinaryUpload } from "../utils/cloudinary.js";
-import jwt from "jsonwebtoken";
 
 const options = {
   httpOnly: true,
@@ -401,7 +400,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
                 },
                 {
                   $addFields: {
-                    $first: "$owner",
+                    owner: { $first: "$owner" },
                   },
                 },
               ],
